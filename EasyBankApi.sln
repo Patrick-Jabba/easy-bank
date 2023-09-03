@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8DC13210-101C-4DA6-A4CE-6AC257A96E22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyBank.Api", "src\EasyBank.Api\EasyBank.Api.csproj", "{C3FAD5B2-52A8-4D15-AA16-976E83E2C7CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B9CB3C94-755E-4C29-A9BE-3C6A849E8C81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyBank.Test", "test\EasyBank.Test\EasyBank.Test.csproj", "{93174B2E-096E-4144-8C7A-DD5A741EEA44}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3FAD5B2-52A8-4D15-AA16-976E83E2C7CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3FAD5B2-52A8-4D15-AA16-976E83E2C7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3FAD5B2-52A8-4D15-AA16-976E83E2C7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3FAD5B2-52A8-4D15-AA16-976E83E2C7CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93174B2E-096E-4144-8C7A-DD5A741EEA44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93174B2E-096E-4144-8C7A-DD5A741EEA44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93174B2E-096E-4144-8C7A-DD5A741EEA44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93174B2E-096E-4144-8C7A-DD5A741EEA44}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C3FAD5B2-52A8-4D15-AA16-976E83E2C7CA} = {8DC13210-101C-4DA6-A4CE-6AC257A96E22}
+		{93174B2E-096E-4144-8C7A-DD5A741EEA44} = {B9CB3C94-755E-4C29-A9BE-3C6A849E8C81}
+	EndGlobalSection
+EndGlobal
