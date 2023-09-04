@@ -8,6 +8,8 @@ using AutoMapper;
 // using EasyBank.Api.Damain.Services.Interfaces;
 // using EasyBank.Api.Data;
 using EasyBank.Api.Data;
+using EasyBank.Api.Domain.Repository.Classes;
+using EasyBank.Api.Domain.Repository.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -44,10 +46,10 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
 
     builder.Services
     .AddSingleton(builder.Configuration)
-    .AddSingleton(builder.Environment);
+    .AddSingleton(builder.Environment)
     // .AddSingleton(mapper);
     // .AddScoped<TokenService>()
-    // .AddScoped<IUsuarioRepository, UsuarioRepository>();
+    .AddScoped<IUsuarioRepository, UsuarioRepository>();
     // .AddScoped<IUsuarioService, UsuarioService>()
     // .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
     // .AddScoped<IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long>, NaturezaDeLancamentoService>()
