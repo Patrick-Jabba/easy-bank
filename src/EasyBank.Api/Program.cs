@@ -1,6 +1,6 @@
 using System.Text;
 using AutoMapper;
-// using EasyBank.Api.AutoMapper;
+using EasyBank.Api.Profiles;
 // using EasyBank.Api.Contract.NaturezaDeLancamento;
 // using EasyBank.Api.Damain.Repository.Classes;
 // using EasyBank.Api.Damain.Repository.Interfaces;
@@ -35,19 +35,19 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     builder.Services.AddDbContext<ApplicationContext>(options =>
         options.UseNpgsql(connectionString), ServiceLifetime.Transient, ServiceLifetime.Transient);
 
-    // var config = new MapperConfiguration(cfg => {
-    //     cfg.AddProfile<UsuarioProfile>();
+    var config = new MapperConfiguration(cfg => {
+        cfg.AddProfile<UsuarioProfile>();
     //     cfg.AddProfile<NaturezaDeLancamentoProfile>();
     //     cfg.AddProfile<ApagarProfile>();
     //     cfg.AddProfile<AreceberProfile>();
-    // });
+    });
 
-    // IMapper mapper = config.CreateMapper();
+    IMapper mapper = config.CreateMapper();
 
     builder.Services
     .AddSingleton(builder.Configuration)
     .AddSingleton(builder.Environment)
-    // .AddSingleton(mapper);
+    .AddSingleton(mapper)
     // .AddScoped<TokenService>()
     .AddScoped<IUsuarioRepository, UsuarioRepository>();
     // .AddScoped<IUsuarioService, UsuarioService>()
