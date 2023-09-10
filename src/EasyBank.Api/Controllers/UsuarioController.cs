@@ -1,4 +1,3 @@
-using EasyBank.Api.Domain.Services.Classes;
 using EasyBank.Api.Domain.Services.Interfaces;
 using EasyBank.Api.DTO.Usuario;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EasyBank.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/usuarios/")]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
@@ -27,7 +26,6 @@ namespace EasyBank.Api.Controllers
             {
                 return Problem(ex.Message);
             }
-
         }
 
         [HttpGet]
@@ -35,7 +33,51 @@ namespace EasyBank.Api.Controllers
         {
             try
             {
-                return Ok(await _usuarioService.Obter(0));
+                return Ok(await _usuarioService.Obter());
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("porEmail/{email}")]
+        public async Task<IActionResult> ObterUsuarioPorEmail(string email)
+        {
+            try
+            {
+                return Ok(await _usuarioService.ObterUsuarioPorEmail(email));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("porId/{id}")]
+        public async Task<IActionResult> ObterPorId(long id)
+        {
+            try
+            {
+                return Ok(await _usuarioService.ObterPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Inativar(long id)
+        {
+            try
+            {
+               await _usuarioService.Inativar(id);
+
+               return NoContent();
             }
             catch (Exception ex)
             {

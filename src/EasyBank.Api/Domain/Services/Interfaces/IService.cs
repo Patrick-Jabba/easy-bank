@@ -8,13 +8,13 @@ namespace EasyBank.Api.Domain.Services.Interfaces
     /// <typeparam name="Identificador">Tipo do Id</typeparam>
     public interface IService<Request, Response, Identificador> where Request : class
     {
-        Task<IEnumerable<Response>> Obter(Identificador idUsuario);
+        Task<IEnumerable<Response>> Obter();
 
-        Task<Response> ObterPorId(Identificador id, Identificador idUsuario);
+        Task<Response> ObterPorId(Identificador id);
 
         Task<Response> Adicionar(Request entidade, Identificador idUsuario);
         Task<Response> Atualizar(Identificador id, Request entidade, Identificador idUsuario);
 
-        Task<Response> Inativar(Identificador id, Identificador idUsuario);
+        Task Inativar(Identificador id);
     }
 }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 namespace EasyBank.Api.Domain.Models
@@ -21,5 +17,10 @@ namespace EasyBank.Api.Domain.Models
         public DateTime DataCadastro {get; set;}
 
         public DateTime? DataInativacao {get; set;}
+
+        public Usuario()
+        {
+            DataCadastro = DateTime.Now;
+        }
     }
 }

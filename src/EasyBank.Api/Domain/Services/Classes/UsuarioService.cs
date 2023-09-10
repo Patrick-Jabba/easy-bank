@@ -18,6 +18,11 @@ namespace EasyBank.Api.Domain.Services.Classes
             _usuarioRepository = usuarioRepository;
             _mapper = mapper;
         }
+
+         public Task<UsuarioLoginResponseDTO> Autenticar(UsuarioLoginRequestDTO usuarioLoginRequest)
+        {
+            throw new NotImplementedException();
+        }
         public async Task<UsuarioResponseDTO> Adicionar(UsuarioRequestDTO entidade, long idUsuario)
         {
             var usuario = _mapper.Map<Usuario>(entidade);
@@ -29,31 +34,45 @@ namespace EasyBank.Api.Domain.Services.Classes
             return _mapper.Map<UsuarioResponseDTO>(usuario);
         }
 
-        public Task<UsuarioResponseDTO> Atualizar(long id, UsuarioRequestDTO entidade, long idUsuario)
+        public async Task<UsuarioResponseDTO> Atualizar(long id, UsuarioRequestDTO entidade, long idUsuario)
         {
-            throw new NotImplementedException();
+            _ = await ObterPorId(id) ?? throw new Exception("Usuário não encontrado para atualização.");
+
+            var usuario = _mapper.Map<Usuario>(entidade);
+
+            usuario.Id = id;
+            usuario.Senha = GerarHashSenha(entidade.Senha);
+            usuario = await _usuarioRepository.Atualizar(usuario);
+
+            return _mapper.Map<UsuarioResponseDTO>(usuario);
         }
 
-        public Task<UsuarioLoginResponseDTO> Autenticar(UsuarioLoginRequestDTO usuarioLoginRequest)
+        public async Task Inativar(long id)
         {
-            throw new NotImplementedException();
+            UsuarioResponseDTO usuario = await ObterPorId(id) ?? throw new Exception("Usuário não encontrado para inativação.");
+
+            await _usuarioRepository.Deletar(_mapper.Map<Usuario>(usuario));
         }
 
-        public Task<UsuarioResponseDTO> Inativar(long id, long idUsuario)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<UsuarioResponseDTO>> Obter(long idUsuario)
+        public async Task<IEnumerable<UsuarioResponseDTO>> Obter()
         {
             var usuarios = await _usuarioRepository.Obter();
 
             return usuarios.Select(usuario => _mapper.Map<UsuarioResponseDTO>(usuario));
         }
 
-        public Task<UsuarioResponseDTO> ObterPorId(long id, long idUsuario)
+        public async Task<UsuarioResponseDTO> ObterPorId(long id)
         {
-            throw new NotImplementedException();
+            var usuario = await _usuarioRepository.ObterPorId(id);
+
+            return _mapper.Map<UsuarioResponseDTO>(usuario);
+        }
+
+        public async Task<UsuarioResponseDTO> ObterUsuarioPorEmail(string email)
+        {
+            var usuario = await _usuarioRepository.ObterUsuarioPorEmail(email);
+
+            return _mapper.Map<UsuarioResponseDTO>(usuario);
         }
 
         private string GerarHashSenha(string senha)

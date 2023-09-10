@@ -6,5 +6,7 @@ namespace EasyBank.Api.Domain.Services.Interfaces
     {
         Task<UsuarioLoginResponseDTO> Autenticar(UsuarioLoginRequestDTO usuarioLoginRequest);
 
+        Task<UsuarioResponseDTO> ObterUsuarioPorEmail(string email);
+
     }
 }
