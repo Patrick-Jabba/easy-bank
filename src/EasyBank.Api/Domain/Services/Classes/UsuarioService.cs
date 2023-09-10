@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using EasyBank.Api.Domain.Models;
 using EasyBank.Api.Domain.Repository.Interfaces;
@@ -27,25 +23,10 @@ namespace EasyBank.Api.Domain.Services.Classes
             var usuario = _mapper.Map<Usuario>(entidade);
 
             usuario.Senha = GerarHashSenha(usuario.Senha);
-            
+
             usuario = await _usuarioRepository.Adicionar(usuario);
 
             return _mapper.Map<UsuarioResponseDTO>(usuario);
-        }
-
-        private string GerarHashSenha(string senha)
-        {
-            string hashSenha;
-
-            using(SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytesSenha = Encoding.UTF8.GetBytes(senha);
-                byte[] byteHashSenha = sha256.ComputeHash(bytesSenha);
-
-                hashSenha = BitConverter.ToString(byteHashSenha).ToLower();
-            }
-
-            return hashSenha;
         }
 
         public Task<UsuarioResponseDTO> Atualizar(long id, UsuarioRequestDTO entidade, long idUsuario)
@@ -63,14 +44,31 @@ namespace EasyBank.Api.Domain.Services.Classes
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<UsuarioResponseDTO>> Obter(long idUsuario)
+        public async Task<IEnumerable<UsuarioResponseDTO>> Obter(long idUsuario)
         {
-            throw new NotImplementedException();
+            var usuarios = await _usuarioRepository.Obter();
+
+            return usuarios.Select(usuario => _mapper.Map<UsuarioResponseDTO>(usuario));
         }
 
         public Task<UsuarioResponseDTO> ObterPorId(long id, long idUsuario)
         {
             throw new NotImplementedException();
+        }
+
+        private string GerarHashSenha(string senha)
+        {
+            string hashSenha;
+
+            using(SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytesSenha = Encoding.UTF8.GetBytes(senha);
+                byte[] byteHashSenha = sha256.ComputeHash(bytesSenha);
+
+                hashSenha = BitConverter.ToString(byteHashSenha).ToLower();
+            }
+
+            return hashSenha;
         }
     }
 }

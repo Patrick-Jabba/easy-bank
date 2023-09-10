@@ -1,19 +1,15 @@
 using System.Text;
 using AutoMapper;
 using EasyBank.Api.Profiles;
-// using EasyBank.Api.Contract.NaturezaDeLancamento;
-// using EasyBank.Api.Damain.Repository.Classes;
-// using EasyBank.Api.Damain.Repository.Interfaces;
-// using EasyBank.Api.Damain.Services.Classes;
-// using EasyBank.Api.Damain.Services.Interfaces;
-// using EasyBank.Api.Data;
 using EasyBank.Api.Data;
 using EasyBank.Api.Domain.Repository.Classes;
 using EasyBank.Api.Domain.Repository.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using EasyBank.Api.Domain.Services.Classes;
+using EasyBank.Api.Domain.Services.Interfaces;
+using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,8 +45,8 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     .AddSingleton(builder.Environment)
     .AddSingleton(mapper)
     // .AddScoped<TokenService>()
-    .AddScoped<IUsuarioRepository, UsuarioRepository>();
-    // .AddScoped<IUsuarioService, UsuarioService>()
+    .AddScoped<IUsuarioRepository, UsuarioRepository>()
+    .AddScoped<IUsuarioService, UsuarioService>();
     // .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
     // .AddScoped<IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long>, NaturezaDeLancamentoService>()
     // .AddScoped<IApagarRepository, ApagarRepository>()
