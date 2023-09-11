@@ -44,7 +44,9 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     .AddSingleton(builder.Configuration)
     .AddSingleton(builder.Environment)
     .AddSingleton(mapper)
-    // .AddScoped<TokenService>()
+    // Aqui quando me pede a classe eu devolvo ela mesma
+    .AddScoped<TokenService>()
+    // Quando o usuario me pede uma interface eu devolvo uma classe
     .AddScoped<IUsuarioRepository, UsuarioRepository>()
     .AddScoped<IUsuarioService, UsuarioService>();
     // .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
@@ -70,10 +72,10 @@ static void ConfigurarServices(WebApplicationBuilder builder)
     {
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
-            Description = "JTW Authorization header using the Beaerer scheme (Example: 'Bearer 12345abcdef')",
-            Name = "Authorization",
             In = ParameterLocation.Header,
-            Type = SecuritySchemeType.ApiKey,
+            Description = "JWT Authorization header using the Bearer scheme",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
             Scheme = "Bearer"
         });
 
@@ -103,15 +105,21 @@ static void ConfigurarServices(WebApplicationBuilder builder)
 
     .AddJwtBearer(x =>
     {
+        var keySecret = builder.Configuration["KeySecret"];
+
+
         x.RequireHttpsMetadata = false;
         x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
+        if(!string.IsNullOrEmpty(keySecret))
+        {
+            x.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["KeySecret"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(keySecret)),
             ValidateIssuer = false,
             ValidateAudience = false
         };
+        }
     });
 }
 

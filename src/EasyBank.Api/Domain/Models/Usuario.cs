@@ -18,9 +18,5 @@ namespace EasyBank.Api.Domain.Models
 
         public DateTime? DataInativacao {get; set;}
 
-        public Usuario()
-        {
-            DataCadastro = DateTime.Now;
-        }
     }
 }

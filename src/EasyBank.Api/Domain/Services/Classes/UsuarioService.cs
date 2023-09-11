@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
@@ -13,21 +14,39 @@ namespace EasyBank.Api.Domain.Services.Classes
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMapper _mapper;
 
-        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper)
+        private readonly TokenService _tokenService;
+
+        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper, TokenService tokenService)
         {
             _usuarioRepository = usuarioRepository;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
-         public Task<UsuarioLoginResponseDTO> Autenticar(UsuarioLoginRequestDTO usuarioLoginRequest)
+         public async Task<UsuarioLoginResponseDTO> Autenticar(UsuarioLoginRequestDTO usuarioLoginRequest)
         {
-            throw new NotImplementedException();
+            UsuarioResponseDTO usuario = await ObterUsuarioPorEmail(usuarioLoginRequest.Email);
+
+            var hashSenha = GerarHashSenha(usuarioLoginRequest.Senha);
+
+            if(usuario is null || usuario.Senha != hashSenha)
+            {
+                throw new AuthenticationException("Usuário ou senha inválidos.");
+            }
+
+            return new UsuarioLoginResponseDTO
+            {
+                Id = usuario.Id,
+                Email = usuario.Email,
+                Token = _tokenService.GerarToken(_mapper.Map<Usuario>(usuario))
+            };
         }
         public async Task<UsuarioResponseDTO> Adicionar(UsuarioRequestDTO entidade, long idUsuario)
         {
             var usuario = _mapper.Map<Usuario>(entidade);
 
             usuario.Senha = GerarHashSenha(usuario.Senha);
+            usuario.DataCadastro = DateTime.Now;
 
             usuario = await _usuarioRepository.Adicionar(usuario);
 
@@ -49,7 +68,7 @@ namespace EasyBank.Api.Domain.Services.Classes
 
         public async Task Inativar(long id)
         {
-            UsuarioResponseDTO usuario = await ObterPorId(id) ?? throw new Exception("Usuário não encontrado para inativação.");
+            var usuario = await _usuarioRepository.ObterPorId(id) ?? throw new Exception("Usuário não encontrado para inativação.");
 
             await _usuarioRepository.Deletar(_mapper.Map<Usuario>(usuario));
         }
@@ -84,7 +103,7 @@ namespace EasyBank.Api.Domain.Services.Classes
                 byte[] bytesSenha = Encoding.UTF8.GetBytes(senha);
                 byte[] byteHashSenha = sha256.ComputeHash(bytesSenha);
 
-                hashSenha = BitConverter.ToString(byteHashSenha).ToLower();
+                hashSenha = BitConverter.ToString(byteHashSenha).Replace("-","").ToLower();
             }
 
             return hashSenha;
