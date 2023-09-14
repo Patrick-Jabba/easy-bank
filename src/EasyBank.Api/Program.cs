@@ -2,14 +2,14 @@ using System.Text;
 using AutoMapper;
 using EasyBank.Api.Profiles;
 using EasyBank.Api.Data;
-using EasyBank.Api.Domain.Repository.Classes;
-using EasyBank.Api.Domain.Repository.Interfaces;
-using EasyBank.Api.Domain.Services.Classes;
-using EasyBank.Api.Domain.Services.Interfaces;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using EasyBank.Api.Domain.Repository.Classes;
+using EasyBank.Api.Domain.Repository.Interfaces;
+using EasyBank.Api.Domain.Services.Classes;
+using EasyBank.Api.Domain.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,8 +49,8 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     // Quando o usuario me pede uma interface eu devolvo uma classe
     .AddScoped<IUsuarioRepository, UsuarioRepository>()
     .AddScoped<IUsuarioService, UsuarioService>()
-    .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>();
-    // .AddScoped<IService<NaturezaDeLancamentoRequestDTO, NaturezaDeLancamentoResponseDTO, long>, NaturezaDeLancamentoService>();
+    .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
+    .AddScoped<INaturezaDeLancamentoService, NaturezaDeLancamentoService>();
     // .AddScoped<IApagarRepository, ApagarRepository>()
     // .AddScoped<IService<ApagarRequestContract, ApagarResponseContract, long>, ApagarService>()
     // .AddScoped<IAreceberRepository, AreceberRepository>()
@@ -145,8 +145,6 @@ static void ConfigurarAplicacao(WebApplication app)
         .UseAuthentication();
 
     app.UseAuthorization();
-
-    app.UseEndpoints(endpoints => endpoints.MapControllers());
 
     app.MapControllers();
 }

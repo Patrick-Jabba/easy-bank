@@ -1,6 +1,6 @@
 namespace EasyBank.Api.DTO.NaturezaDeLancamento
 {
-    public class NaturezaDeLancamentoResponseDto : NaturezaDeLancamentoRequestDto
+    public class NaturezaDeLancamentoResponseDTO : NaturezaDeLancamentoRequestDTO
     {
         public long Id { get; set; }
         public long IdUsuario { get; set; }

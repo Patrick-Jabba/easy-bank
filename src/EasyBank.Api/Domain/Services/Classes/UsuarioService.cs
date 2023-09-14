@@ -55,7 +55,7 @@ namespace EasyBank.Api.Domain.Services.Classes
 
         public async Task<UsuarioResponseDTO> Atualizar(long id, UsuarioRequestDTO entidade, long idUsuario)
         {
-            _ = await ObterPorId(id) ?? throw new Exception("Usuário não encontrado para atualização.");
+            _ = await ObterPorId(id, idUsuario) ?? throw new Exception("Usuário não encontrado para atualização.");
 
             var usuario = _mapper.Map<Usuario>(entidade);
 
@@ -66,7 +66,7 @@ namespace EasyBank.Api.Domain.Services.Classes
             return _mapper.Map<UsuarioResponseDTO>(usuario);
         }
 
-        public async Task Inativar(long id)
+        public async Task Inativar(long id, long idUsuario)
         {
             var usuario = await _usuarioRepository.ObterPorId(id) ?? throw new Exception("Usuário não encontrado para inativação.");
 
@@ -80,7 +80,7 @@ namespace EasyBank.Api.Domain.Services.Classes
             return usuarios.Select(usuario => _mapper.Map<UsuarioResponseDTO>(usuario));
         }
 
-        public async Task<UsuarioResponseDTO> ObterPorId(long id)
+        public async Task<UsuarioResponseDTO> ObterPorId(long id, long idUsuario)
         {
             var usuario = await _usuarioRepository.ObterPorId(id);
 

@@ -18,18 +18,22 @@ namespace EasyBank.Api.Domain.Repository.Classes
             await _context.Usuarios.AddAsync(obj);
             await _context.SaveChangesAsync();
 
-            return await ObterPorId(obj.Id);
+            return obj;
         }
 
         public async Task<Usuario?> Atualizar(Usuario obj)
         {
             Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == obj.Id);
 
-            _context.Entry(usuario).CurrentValues.SetValues(obj);
-            _context.Update<Usuario>(usuario);
+           if(usuario != null)
+           {
+                _context.Entry(usuario).CurrentValues.SetValues(obj);
+                _context.Update<Usuario>(usuario);
 
-            await _context.SaveChangesAsync();
-            return usuario;
+                await _context.SaveChangesAsync();
+           }
+
+           return usuario;
         }
 
         public async Task Deletar(Usuario obj)

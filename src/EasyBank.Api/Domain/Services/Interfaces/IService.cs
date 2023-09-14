@@ -10,11 +10,11 @@ namespace EasyBank.Api.Domain.Services.Interfaces
     {
         Task<IEnumerable<Response>> Obter();
 
-        Task<Response> ObterPorId(Identificador id);
+        Task<Response> ObterPorId(Identificador id, Identificador idUsuario);
 
         Task<Response> Adicionar(Request entidade, Identificador idUsuario);
         Task<Response> Atualizar(Identificador id, Request entidade, Identificador idUsuario);
 
-        Task Inativar(Identificador id);
+        Task Inativar(Identificador id, Identificador idUsuario);
     }
 }

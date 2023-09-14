@@ -1,6 +1,6 @@
 namespace EasyBank.Api.DTO.NaturezaDeLancamento
 {
-    public class NaturezaDeLancamentoRequestDto
+    public class NaturezaDeLancamentoRequestDTO
     {
         public string Descricao {get; set;} = string.Empty;
 

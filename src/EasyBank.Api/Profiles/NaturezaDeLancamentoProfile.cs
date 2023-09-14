@@ -8,8 +8,8 @@ namespace EasyBank.Api.Profiles
     {
         public NaturezaDeLancamentoProfile()
         {
-            CreateMap<NaturezaDeLancamento, NaturezaDeLancamentoRequestDto>().ReverseMap();
-            CreateMap<NaturezaDeLancamento, NaturezaDeLancamentoResponseDto>().ReverseMap();
+            CreateMap<NaturezaDeLancamento, NaturezaDeLancamentoRequestDTO>().ReverseMap();
+            CreateMap<NaturezaDeLancamento, NaturezaDeLancamentoResponseDTO>().ReverseMap();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace EasyBank.Api.Controllers
 {
     [ApiController]
     [Route("api/usuarios/")]
-    public class UsuarioController : ControllerBase
+    public class UsuarioController : BaseController
     {
         private readonly IUsuarioService _usuarioService;
 
@@ -20,11 +20,11 @@ namespace EasyBank.Api.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Autenticar(UsuarioRequestDTO usuarioRequestDto)
+        public async Task<IActionResult> Autenticar(UsuarioRequestDTO usuarioRequestDTO)
         {
             try
             {
-                return Ok(await _usuarioService.Autenticar(usuarioRequestDto));
+                return Ok(await _usuarioService.Autenticar(usuarioRequestDTO));
             }
             catch( AuthenticationException ex)
             {
@@ -37,11 +37,11 @@ namespace EasyBank.Api.Controllers
         }
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Adicionar(UsuarioRequestDTO usuarioRequestDto)
+        public async Task<IActionResult> Adicionar(UsuarioRequestDTO usuarioRequestDTO)
         {
             try
             {
-                return Created("", await _usuarioService.Adicionar(usuarioRequestDto, 0));
+                return Created("", await _usuarioService.Adicionar(usuarioRequestDTO, 0));
             }
             catch (Exception ex)
             {
@@ -85,7 +85,7 @@ namespace EasyBank.Api.Controllers
         {
             try
             {
-                return Ok(await _usuarioService.ObterPorId(id));
+                return Ok(await _usuarioService.ObterPorId(id, 0));
             }
             catch (Exception ex)
             {
@@ -96,11 +96,11 @@ namespace EasyBank.Api.Controllers
         [HttpPut]
         [Route("{id}")]
         [Authorize]
-        public async Task<IActionResult> Atualizar(long id, UsuarioRequestDTO usuarioDto)
+        public async Task<IActionResult> Atualizar(long id, UsuarioRequestDTO usuarioDTO)
         {
             try
             {
-                return Ok(await _usuarioService.Atualizar(id, usuarioDto, 0));
+                return Ok(await _usuarioService.Atualizar(id, usuarioDTO, 0));
             }
            catch (Exception ex)
             {
@@ -115,7 +115,7 @@ namespace EasyBank.Api.Controllers
         {
             try
             {
-               await _usuarioService.Inativar(id);
+               await _usuarioService.Inativar(id, 0);
 
                return NoContent();
             }

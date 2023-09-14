@@ -1,44 +1,85 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using EasyBank.Api.Domain.Models;
 using EasyBank.Api.Domain.Repository.Classes;
+using EasyBank.Api.Domain.Repository.Interfaces;
 using EasyBank.Api.Domain.Services.Interfaces;
 using EasyBank.Api.DTO.NaturezaDeLancamento;
 
 namespace EasyBank.Api.Domain.Services.Classes
 {
-    public class NaturezaDeLancamentoService : IService<NaturezaDeLancamentoRequestDto, NaturezaDeLancamentoResponseDto, long>
+    public class NaturezaDeLancamentoService : INaturezaDeLancamentoService
     {
-        private readonly NaturezaDeLancamentoRepository _repository;
+        private readonly INaturezaDeLancamentoRepository _naturezaDeLancamentoRepository;
 
-        public NaturezaDeLancamentoService(NaturezaDeLancamentoRepository repository)
-        {
-            _repository = repository;
-        }
-        public Task<NaturezaDeLancamentoResponseDto> Adicionar(NaturezaDeLancamentoRequestDto entidade, long idUsuario)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly IMapper _mapper;
 
-        public Task<NaturezaDeLancamentoResponseDto> Atualizar(long id, NaturezaDeLancamentoRequestDto entidade, long idUsuario)
+        public NaturezaDeLancamentoService(INaturezaDeLancamentoRepository naturezaDeLancamentoRepository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _naturezaDeLancamentoRepository = naturezaDeLancamentoRepository;
+            _mapper = mapper;
         }
-
-        public Task Inativar(long id)
+        public async Task<NaturezaDeLancamentoResponseDTO> Adicionar(NaturezaDeLancamentoRequestDTO entidade, long idUsuario)
         {
-            throw new NotImplementedException();
-        }
+            var naturezaDeLancamento = _mapper.Map<NaturezaDeLancamento>(entidade);
 
-        public Task<IEnumerable<NaturezaDeLancamentoResponseDto>> Obter()
-        {
-            throw new NotImplementedException();
+            naturezaDeLancamento.DataCadastro = DateTime.Now;
+            naturezaDeLancamento.IdUsuario = idUsuario;
+
+            naturezaDeLancamento = await _naturezaDeLancamentoRepository.Adicionar(naturezaDeLancamento);
+
+            return _mapper.Map<NaturezaDeLancamentoResponseDTO>(naturezaDeLancamento);
         }
 
-        public Task<NaturezaDeLancamentoResponseDto> ObterPorId(long id)
+        public async Task<NaturezaDeLancamentoResponseDTO> Atualizar(long id, NaturezaDeLancamentoRequestDTO entidade, long idUsuario)
         {
-            throw new NotImplementedException();
+            NaturezaDeLancamento? naturezaDeLancamento = await ObterPorIdVinculadoAoIdUsuario(id, idUsuario);
+
+            naturezaDeLancamento.Descricao = entidade.Descricao;
+            naturezaDeLancamento.Observacao = entidade.Observacao;
+
+            naturezaDeLancamento = await _naturezaDeLancamentoRepository.Atualizar(naturezaDeLancamento);
+
+            return _mapper.Map<NaturezaDeLancamentoResponseDTO>(naturezaDeLancamento);
+        }
+
+        public async Task Inativar(long id, long idUsuario)
+        {
+            NaturezaDeLancamento naturezaDeLancamento = await ObterPorIdVinculadoAoIdUsuario(id, idUsuario);
+
+            await _naturezaDeLancamentoRepository.Deletar(naturezaDeLancamento);
+        }
+
+        public async Task<IEnumerable<NaturezaDeLancamentoResponseDTO>> ObterPeloIdUsuario(long idUsuario)
+        {
+            var naturezasDeLancamento = await _naturezaDeLancamentoRepository.ObterPeloIdUsuario(idUsuario);
+
+            return naturezasDeLancamento.Select(n => _mapper.Map<NaturezaDeLancamentoResponseDTO>(n));
+        }
+
+         public async Task<IEnumerable<NaturezaDeLancamentoResponseDTO>> Obter()
+        {
+            var naturezasDeLancamento = await _naturezaDeLancamentoRepository.Obter();
+
+            return naturezasDeLancamento.Select(n => _mapper.Map<NaturezaDeLancamentoResponseDTO>(n));
+        }
+
+        public async Task<NaturezaDeLancamentoResponseDTO> ObterPorId(long id, long idUsuario)
+        {
+            NaturezaDeLancamento naturezaDeLancamento = await ObterPorIdVinculadoAoIdUsuario(id, idUsuario);
+
+            return _mapper.Map<NaturezaDeLancamentoResponseDTO>(naturezaDeLancamento);
+        }
+
+        private async Task<NaturezaDeLancamento> ObterPorIdVinculadoAoIdUsuario(long id, long idUsuario)
+        {
+            var naturezaDeLancamento = await _naturezaDeLancamentoRepository.ObterPorId(id);
+
+            if(naturezaDeLancamento is null || naturezaDeLancamento.IdUsuario != idUsuario)
+            {
+                throw new Exception($"Não foi encontrada nenhuma natureza de lançamento pelo id {id}");
+            }
+
+            return naturezaDeLancamento;
         }
     }
 }
