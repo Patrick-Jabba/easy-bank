@@ -33,7 +33,7 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
 
     var config = new MapperConfiguration(cfg => {
         cfg.AddProfile<UsuarioProfile>();
-    //     cfg.AddProfile<NaturezaDeLancamentoProfile>();
+        cfg.AddProfile<NaturezaDeLancamentoProfile>();
     //     cfg.AddProfile<ApagarProfile>();
     //     cfg.AddProfile<AreceberProfile>();
     });
@@ -48,9 +48,9 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     .AddScoped<TokenService>()
     // Quando o usuario me pede uma interface eu devolvo uma classe
     .AddScoped<IUsuarioRepository, UsuarioRepository>()
-    .AddScoped<IUsuarioService, UsuarioService>();
-    // .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
-    // .AddScoped<IService<NaturezaDeLancamentoRequestContract, NaturezaDeLancamentoResponseContract, long>, NaturezaDeLancamentoService>()
+    .AddScoped<IUsuarioService, UsuarioService>()
+    .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>();
+    // .AddScoped<IService<NaturezaDeLancamentoRequestDTO, NaturezaDeLancamentoResponseDTO, long>, NaturezaDeLancamentoService>();
     // .AddScoped<IApagarRepository, ApagarRepository>()
     // .AddScoped<IService<ApagarRequestContract, ApagarResponseContract, long>, ApagarService>()
     // .AddScoped<IAreceberRepository, AreceberRepository>()
