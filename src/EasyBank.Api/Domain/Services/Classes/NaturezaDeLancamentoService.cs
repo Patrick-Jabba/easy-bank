@@ -81,5 +81,11 @@ namespace EasyBank.Api.Domain.Services.Classes
 
             return naturezaDeLancamento;
         }
+
+        public async Task<IEnumerable<NaturezaDeLancamentoResponseDTO>> Obter(long idUsuario)
+        {
+            var naturezasDelancamento = await _naturezaDeLancamentoRepository.ObterPeloIdUsuario(idUsuario);
+            return naturezasDelancamento.Select(natureza => _mapper.Map<NaturezaDeLancamentoResponseDTO>(natureza));
+        }
     }
 }

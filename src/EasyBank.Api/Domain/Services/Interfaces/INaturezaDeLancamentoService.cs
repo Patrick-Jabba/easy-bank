@@ -9,5 +9,7 @@ namespace EasyBank.Api.Domain.Services.Interfaces
     public interface INaturezaDeLancamentoService : IService<NaturezaDeLancamentoRequestDTO, NaturezaDeLancamentoResponseDTO, long>
     {
         Task<IEnumerable<NaturezaDeLancamentoResponseDTO>> ObterPeloIdUsuario(long idUsuario);
+
+        Task<IEnumerable<NaturezaDeLancamentoResponseDTO>> Obter(long idUsuario);
     }
 }
