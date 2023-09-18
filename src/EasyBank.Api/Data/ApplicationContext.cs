@@ -10,7 +10,7 @@ namespace EasyBank.Api.Data
 
         public DbSet<Usuario> Usuarios {get; set;}
         public DbSet<NaturezaDeLancamento> NaturezaDeLancamentos {get; set;}
-        public DbSet<APagar> Apagar {get; set;}
+        public DbSet<APagar> APagarContext {get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

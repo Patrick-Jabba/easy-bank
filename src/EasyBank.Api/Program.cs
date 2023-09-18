@@ -10,6 +10,7 @@ using EasyBank.Api.Domain.Repository.Classes;
 using EasyBank.Api.Domain.Repository.Interfaces;
 using EasyBank.Api.Domain.Services.Classes;
 using EasyBank.Api.Domain.Services.Interfaces;
+using EasyBank.Api.DTO.APagar;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +35,8 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     var config = new MapperConfiguration(cfg => {
         cfg.AddProfile<UsuarioProfile>();
         cfg.AddProfile<NaturezaDeLancamentoProfile>();
-    //     cfg.AddProfile<ApagarProfile>();
-    //     cfg.AddProfile<AreceberProfile>();
+        cfg.AddProfile<APagarProfile>();
+    //     cfg.AddProfile<AReceberProfile>();
     });
 
     IMapper mapper = config.CreateMapper();
@@ -50,11 +51,11 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     .AddScoped<IUsuarioRepository, UsuarioRepository>()
     .AddScoped<IUsuarioService, UsuarioService>()
     .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
-    .AddScoped<INaturezaDeLancamentoService, NaturezaDeLancamentoService>();
-    // .AddScoped<IApagarRepository, ApagarRepository>()
-    // .AddScoped<IService<ApagarRequestContract, ApagarResponseContract, long>, ApagarService>()
-    // .AddScoped<IAreceberRepository, AreceberRepository>()
-    // .AddScoped<IService<AreceberRequestContract, AreceberResponseContract, long>, AreceberService>();
+    .AddScoped<INaturezaDeLancamentoService, NaturezaDeLancamentoService>()
+    .AddScoped<IAPagarRepository, APagarRepository>()
+    .AddScoped<IAPagarService, APagarService>();
+    // .AddScoped<IAReceberRepository, AReceberRepository>()
+    // .AddScoped<IService<AReceberRequestContract, AReceberResponseContract, long>, AReceberService>();
 }
 
 // Configura o serviços da API.

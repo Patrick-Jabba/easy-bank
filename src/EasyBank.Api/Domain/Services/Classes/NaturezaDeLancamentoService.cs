@@ -34,8 +34,7 @@ namespace EasyBank.Api.Domain.Services.Classes
         {
             NaturezaDeLancamento? naturezaDeLancamento = await ObterPorIdVinculadoAoIdUsuario(id, idUsuario);
 
-            naturezaDeLancamento.Descricao = entidade.Descricao;
-            naturezaDeLancamento.Observacao = entidade.Observacao;
+            _mapper.Map(entidade, naturezaDeLancamento);
 
             naturezaDeLancamento = await _naturezaDeLancamentoRepository.Atualizar(naturezaDeLancamento);
 

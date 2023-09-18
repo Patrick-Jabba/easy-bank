@@ -25,3 +25,4 @@ Criando o CRUD:
 
 
 dotnet ef migrations add CriarEntidadeAreceber
+dotnet ef database update
