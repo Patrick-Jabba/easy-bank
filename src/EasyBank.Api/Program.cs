@@ -36,7 +36,7 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
         cfg.AddProfile<UsuarioProfile>();
         cfg.AddProfile<NaturezaDeLancamentoProfile>();
         cfg.AddProfile<APagarProfile>();
-    //     cfg.AddProfile<AReceberProfile>();
+        cfg.AddProfile<AReceberProfile>();
     });
 
     IMapper mapper = config.CreateMapper();
@@ -53,9 +53,9 @@ static void ConfigurarInjecaoDeDependencia(WebApplicationBuilder builder)
     .AddScoped<INaturezaDeLancamentoRepository, NaturezaDeLancamentoRepository>()
     .AddScoped<INaturezaDeLancamentoService, NaturezaDeLancamentoService>()
     .AddScoped<IAPagarRepository, APagarRepository>()
-    .AddScoped<IAPagarService, APagarService>();
-    // .AddScoped<IAReceberRepository, AReceberRepository>()
-    // .AddScoped<IService<AReceberRequestContract, AReceberResponseContract, long>, AReceberService>();
+    .AddScoped<IAPagarService, APagarService>()
+    .AddScoped<IAReceberRepository, AReceberRepository>()
+    .AddScoped<IAReceberService, AReceberService>();
 }
 
 // Configura o serviços da API.
