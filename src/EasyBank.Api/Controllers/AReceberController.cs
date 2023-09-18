@@ -1,6 +1,8 @@
 
+using System.ComponentModel.DataAnnotations;
 using EasyBank.Api.Domain.Services.Interfaces;
 using EasyBank.Api.DTO.AReceber;
+using EasyBank.Api.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +30,10 @@ namespace EasyBank.Api.Controllers
                 _idUsuario = ObterIdUsuarioLogado();
                 return Created("", await _aReceberService.Adicionar(aReceberRequestDTO, _idUsuario));
             }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(RetornarModelBadRequest(ex));
+            }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
@@ -44,6 +50,14 @@ namespace EasyBank.Api.Controllers
                 _idUsuario = ObterIdUsuarioLogado();
                 return Ok(await _aReceberService.Atualizar(id, aReceberDTO, _idUsuario));
             }
+             catch (NotFoundException ex)
+            {
+                return NotFound(RetornarModelNotFound(ex));
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(RetornarModelBadRequest(ex));
+            }
            catch (Exception ex)
             {
                 return Problem(ex.Message);
@@ -58,6 +72,10 @@ namespace EasyBank.Api.Controllers
             {
                 _idUsuario = ObterIdUsuarioLogado();
                 return Ok(await _aReceberService.Obter(_idUsuario));
+            }
+             catch (NotFoundException ex)
+            {
+                return NotFound(RetornarModelNotFound(ex));
             }
             catch (Exception ex)
             {
@@ -74,6 +92,10 @@ namespace EasyBank.Api.Controllers
             {
                 _idUsuario = ObterIdUsuarioLogado();
                 return Ok(await _aReceberService.ObterPorId(id, _idUsuario));
+            }
+             catch (NotFoundException ex)
+            {
+                return NotFound(RetornarModelNotFound(ex));
             }
             catch (Exception ex)
             {
@@ -92,6 +114,10 @@ namespace EasyBank.Api.Controllers
                await _aReceberService.Inativar(id, _idUsuario);
 
                return NoContent();
+            }
+             catch (NotFoundException ex)
+            {
+                return NotFound(RetornarModelNotFound(ex));
             }
             catch (Exception ex)
             {

@@ -1,9 +1,9 @@
 using AutoMapper;
 using EasyBank.Api.Domain.Models;
-using EasyBank.Api.Domain.Repository.Classes;
 using EasyBank.Api.Domain.Repository.Interfaces;
 using EasyBank.Api.Domain.Services.Interfaces;
 using EasyBank.Api.DTO.NaturezaDeLancamento;
+using EasyBank.Api.Exceptions;
 
 namespace EasyBank.Api.Domain.Services.Classes
 {
@@ -75,7 +75,7 @@ namespace EasyBank.Api.Domain.Services.Classes
 
             if(naturezaDeLancamento is null || naturezaDeLancamento.IdUsuario != idUsuario)
             {
-                throw new Exception($"Não foi encontrada nenhuma natureza de lançamento pelo id {id}");
+                throw new NotFoundException($"Não foi encontrada nenhuma natureza de lançamento pelo id {id}");
             }
 
             return naturezaDeLancamento;

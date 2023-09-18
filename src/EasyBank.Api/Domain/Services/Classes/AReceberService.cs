@@ -3,6 +3,7 @@ using EasyBank.Api.Domain.Models;
 using EasyBank.Api.Domain.Repository.Interfaces;
 using EasyBank.Api.Domain.Services.Interfaces;
 using EasyBank.Api.DTO.AReceber;
+using EasyBank.Api.Exceptions;
 
 namespace EasyBank.Api.Domain.Services.Classes
 {
@@ -19,6 +20,7 @@ namespace EasyBank.Api.Domain.Services.Classes
         }
         public async Task<AReceberResponseDTO> Adicionar(AReceberRequestDTO entidade, long idUsuario)
         {
+            Validar(entidade);
             var aReceber = _mapper.Map<AReceber>(entidade);
 
             aReceber.DataCadastro = DateTime.Now;
@@ -79,7 +81,7 @@ namespace EasyBank.Api.Domain.Services.Classes
 
             if(aReceber is null || aReceber.IdUsuario != idUsuario)
             {
-                throw new Exception($"Não foi encontrada nenhum título a pagar pelo id {id}");
+                throw new NotFoundException($"Não foi encontrada nenhum título a pagar pelo id {id}");
             }
 
             return aReceber;
@@ -89,6 +91,14 @@ namespace EasyBank.Api.Domain.Services.Classes
         {
             var titulosAReceber = await _aReceberRepository.ObterPeloIdUsuario(idUsuario);
             return titulosAReceber.Select(natureza => _mapper.Map<AReceberResponseDTO>(natureza));
+        }
+
+        private void Validar(AReceberRequestDTO entidade)
+        {
+            if(entidade.ValorOriginal < 0 ||entidade.ValorRecebido < 0)
+            {
+                throw new BadRequestException("Os campos valor original e valor recebimento não podem ser negativos");
+            }
         }
     }
 }

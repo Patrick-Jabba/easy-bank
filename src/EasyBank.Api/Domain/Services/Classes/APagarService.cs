@@ -3,6 +3,7 @@ using EasyBank.Api.Domain.Models;
 using EasyBank.Api.Domain.Repository.Interfaces;
 using EasyBank.Api.Domain.Services.Interfaces;
 using EasyBank.Api.DTO.APagar;
+using EasyBank.Api.Exceptions;
 
 namespace EasyBank.Api.Domain.Services.Classes
 {
@@ -19,6 +20,7 @@ namespace EasyBank.Api.Domain.Services.Classes
         }
         public async Task<APagarResponseDTO> Adicionar(APagarRequestDTO entidade, long idUsuario)
         {
+            Validar(entidade);
             var aPagar = _mapper.Map<APagar>(entidade);
 
             aPagar.DataCadastro = DateTime.Now;
@@ -79,7 +81,7 @@ namespace EasyBank.Api.Domain.Services.Classes
 
             if(aPagar is null || aPagar.IdUsuario != idUsuario)
             {
-                throw new Exception($"Não foi encontrada nenhum título a pagar pelo id {id}");
+                throw new NotFoundException($"Não foi encontrada nenhum título a pagar pelo id {id}");
             }
 
             return aPagar;
@@ -89,6 +91,14 @@ namespace EasyBank.Api.Domain.Services.Classes
         {
             var titulosAPagar = await _aPagarRepository.ObterPeloIdUsuario(idUsuario);
             return titulosAPagar.Select(natureza => _mapper.Map<APagarResponseDTO>(natureza));
+        }
+
+        private void Validar(APagarRequestDTO entidade)
+        {
+            if(entidade.ValorOriginal < 0 ||entidade.ValorPago < 0)
+            {
+                throw new BadRequestException("Os campos valor original e valor pago não podem ser negativos");
+            }
         }
     }
 }

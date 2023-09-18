@@ -6,6 +6,7 @@ using EasyBank.Api.Domain.Models;
 using EasyBank.Api.Domain.Repository.Interfaces;
 using EasyBank.Api.Domain.Services.Interfaces;
 using EasyBank.Api.DTO.Usuario;
+using EasyBank.Api.Exceptions;
 
 namespace EasyBank.Api.Domain.Services.Classes
 {
@@ -55,7 +56,7 @@ namespace EasyBank.Api.Domain.Services.Classes
 
         public async Task<UsuarioResponseDTO> Atualizar(long id, UsuarioRequestDTO entidade, long idUsuario)
         {
-            _ = await ObterPorId(id, idUsuario) ?? throw new Exception("Usuário não encontrado para atualização.");
+            _ = await ObterPorId(id, idUsuario) ?? throw new NotFoundException("Usuário não encontrado para atualização.");
 
             var usuario = _mapper.Map<Usuario>(entidade);
 
@@ -68,7 +69,7 @@ namespace EasyBank.Api.Domain.Services.Classes
 
         public async Task Inativar(long id, long idUsuario)
         {
-            var usuario = await _usuarioRepository.ObterPorId(id) ?? throw new Exception("Usuário não encontrado para inativação.");
+            var usuario = await _usuarioRepository.ObterPorId(id) ?? throw new NotFoundException("Usuário não encontrado para inativação.");
 
             await _usuarioRepository.Deletar(_mapper.Map<Usuario>(usuario));
         }
